@@ -1,17 +1,17 @@
 import './index.html';
-import './style.scss';
-import code  from "./img/img1.jpg";
-import { App } from './App';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
+import { SplitterView } from './components/splitter/splitter-view';
+import React from 'react';
+import { Splitter } from './components/splitter/splitter';
+import "./styles.css";
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+const splitterModel: Splitter = new Splitter();
 
-const imgWrap = document.querySelector('.img');
-const img = new Image();
-img.src = code;
-img.width = 300;
-imgWrap.append(img);
 
-const mult = (a: number, b: number) => a + b;
-console.log(mult(2, 3));
+ReactDOM.render(
+    <SplitterView {...splitterModel}>
+        <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "red" }}>111</div>
+        <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "blue" }}>222</div>
+        <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "green" }}>333</div>
+    </SplitterView>,
+    document.querySelector('#root'));
