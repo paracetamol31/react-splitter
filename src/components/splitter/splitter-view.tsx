@@ -1,4 +1,4 @@
-import { CSSProperties, Children, FC } from "react";
+import { CSSProperties, Children, FC, useCallback, useRef } from "react";
 import splitterStyles from "./splitter.module.css";
 import { Splitter } from "./splitter";
 import React from "react";
@@ -8,6 +8,21 @@ import { SplitterItem } from "../splitter-item/splitter-item";
 import { Separator } from "../separator/separator";
 
 export const SplitterView: FC<Splitter> = (splitter) => {
+    const splitterRef = useRef<HTMLDivElement>(null);
+    let listChildWidget: Array<string | JSX.Element | JSX.Element[]> = [];
+
+    if (Array.isArray(splitter.children)) {
+        listChildWidget = splitter.children;
+    } else {
+        listChildWidget = [splitter.children]
+    }
+
+    const onResize = useCallback(() => {
+
+    }, []);
+
+    const listSplitterItems: Array<SplitterItem> = [];
+
     const className = `${splitterStyles.separator} ${splitter.orientation}`;
 
     const inlineStyle: CSSProperties = {
@@ -17,23 +32,31 @@ export const SplitterView: FC<Splitter> = (splitter) => {
 
     const content: Array<string | JSX.Element> = [];
 
-    if (Array.isArray(splitter.children)) {
-        const length: number = splitter.children.length;
-        splitter.children.map((child, index) => {
-            content.push(
-                <SplitterItemView {...new SplitterItem()}>{child}</SplitterItemView>
-            );
-            if (index !== length - 1) {
-                content.push(<SeparatorView {...new Separator()} />)
-            }
-        })
-    } else {
-        content.push(splitter.children);
-    }
+    let prevSplitterItem: SplitterItem | null = null;
+
+    listChildWidget.map((child, index) => {
+        let offset: number = splitter.separatorSize;
+        if (index === 0 || index === length - 1) {
+            offset = offset / 2;
+        }
+        const splitterItem: SplitterItem = new SplitterItem({ offset: offset });
+        listSplitterItems.push(splitterItem);
+        if (index !== 0) {
+            content.push(<SeparatorView {...new Separator({
+                firstSplitterItem: prevSplitterItem,
+                secondSplitterItem: splitterItem
+            })} />)
+        }
+        content.push(
+            <SplitterItemView {...splitterItem}>{child}</SplitterItemView>
+        );
+    })
+
     return (
         <section
             className={`${splitterStyles.splitter} ${className}`}
             style={inlineStyle}
+            ref={splitterRef}
         >
             {content}
         </section>
