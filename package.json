@@ -8,7 +8,9 @@
     "build-dev": "set NODE_ENV=development&&webpack",
     "build-prod": "set NODE_ENV=production&&webpack",
     "clear": "rd /s /q /dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint --fix --ext .ts --ext .tsx ./src"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +22,14 @@
     "@types/react-dom": "^18.2.6",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.8.1",
+    "eslint": "^8.50.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-flowtype": "^8.0.3",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
     "image-webpack-loader": "^8.1.0",
@@ -38,6 +48,7 @@
   },
   "dependencies": {
     "mobx": "^6.10.2",
+    "mobx-react": "^9.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

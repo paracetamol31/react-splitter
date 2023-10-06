@@ -8,13 +8,16 @@ export class Separator {
     orientation: "vertical" | "horizontal" = "horizontal";
     size: number = defaultSeparatorSize;
 
-    constructor(params?: IParamsSeparatorConstructor) {
+    public setResizing: (value: boolean) => void;
+
+
+    constructor(params: IParamsSeparatorConstructor) {
         if (params) {
             this.orientation = params.orientation || "horizontal";
             this.size = params.size ?? defaultSeparatorSize;
             this.firstSplitterItem = params.firstSplitterItem || null;
             this.secondSplitterItem = params.secondSplitterItem || null
-
+            this.setResizing = params.setResizing;
         }
         makeAutoObservable(this);
     }

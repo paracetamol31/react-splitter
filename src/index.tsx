@@ -9,7 +9,7 @@ const splitterModel: Splitter = new Splitter();
 
 
 ReactDOM.render(
-    <SplitterView {...splitterModel}>
+    <SplitterView splitter={splitterModel}>
         <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "red" }}>111</div>
         <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "blue" }}>222</div>
         <div style={{ display: "flex", width: "100%", height: "100%", backgroundColor: "green" }}>333</div>

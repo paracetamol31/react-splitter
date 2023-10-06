@@ -6,5 +6,6 @@ export interface IParamsSeparatorConstructor {
     secondSplitterItem?: SplitterItem | null;
     orientation?: TOrientation,
     size?: number
+    setResizing: (value: boolean) => void
 }
 export const defaultSeparatorSize: number = 15;
