@@ -13,37 +13,10 @@ const content: Array<string | JSX.Element> = [];
 export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElement }> = observer(({ splitter, children }) => {
     const splitterRef = useRef<HTMLDivElement>(null);
 
-    const onResize = useCallback<MouseEventHandler<HTMLElement>>((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        if (splitter.isResizing && splitter.seavedPointCurrentSeparator !== null && splitterRef.current && splitter.currentSeparotorIndex !== null) {
-            let actualseparatorPoint: number = 0;
-            if (splitter.orientation === "horizontal") {
-                actualseparatorPoint = event.clientX;
-            } else {
-                actualseparatorPoint = event.clientY;
-            }
-
-            let size: number;
-            if (splitter.orientation === "horizontal") {
-                size = splitterRef.current.clientWidth;
-            } else {
-                size = splitterRef.current.clientHeight;
-            }
-            
-            const ofsset: number = splitter.seavedPointCurrentSeparator - actualseparatorPoint;
-            let percentageOfsset: number = ofsset / (size / 100) / 100;
-
-            splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize -= percentageOfsset;
-            splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += percentageOfsset;
-
-            console.log(splitter.seavedPointCurrentSeparator - actualseparatorPoint);
-
-            splitter.seavedPointCurrentSeparator = actualseparatorPoint;
-            event.preventDefault();
-        }
-    }, [splitter.isResizing]);
-
     useEffect(() => {
         let listChildWidget: Array<string | JSX.Element | JSX.Element[]> = [];
+
+        splitter.splitterRef = splitterRef;
 
         // let size: number;
         // if (splitter.orientation === "horizontal") {
@@ -74,7 +47,7 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
             if (index === 0 || index === listChildWidget.length - 1) {
                 offset = offset / 2;
             }
-            debugger
+
             const ratioSize: number = (proportion / (sumProportions / 100)) / 100;
 
             const splitterItem: SplitterItem = new SplitterItem({ offset: offset, splitter: splitter, ratioSize: ratioSize });
@@ -96,13 +69,13 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
         flexDirection: splitter.orientation === "horizontal" ? "row" : "column"
     }
 
+    console.log("splitter");
     return (
         splitter.isInit
             ? <section
                 className={`${splitterStyles.splitter} ${className}`}
                 style={inlineStyle}
                 ref={splitterRef}
-                onMouseMove={onResize}
             >
                 {content}
             </section>

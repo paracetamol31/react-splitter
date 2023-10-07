@@ -18,7 +18,8 @@ export const SplitterItemView: FC<{ splitterItem: SplitterItem, children: TChild
             height: `calc(${100 * splitterItem.ratioSize}% - ${splitterItem.offset}px)`
         }
     }
-
+    console.log("splitter-item");
+    
     return (
         <section
             className={splitterItemStyle.splitterItem}

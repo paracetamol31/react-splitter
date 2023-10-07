@@ -2,6 +2,7 @@ import { action, makeObservable, observable } from "mobx"
 import { IParamsSplitterConstructor, TOrientation } from "./types"
 import { defaultSeparatorSize } from "../separator/types"
 import { SplitterItem } from "../splitter-item/splitter-item";
+import { RefObject } from "react";
 
 export class Splitter {
     separatorSize: number = defaultSeparatorSize;
@@ -9,6 +10,7 @@ export class Splitter {
     orientation: TOrientation = "horizontal";
     currentSeparotorIndex: number | null = null;
     listSplitterItems: Array<SplitterItem> = []
+    splitterRef: RefObject<HTMLDivElement> | null = null;
 
     seavedPointCurrentSeparator: number | null = null;
     isInit: boolean = false;

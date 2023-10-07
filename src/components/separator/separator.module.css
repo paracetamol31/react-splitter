@@ -1,4 +1,11 @@
 .separator {
     background-color: rgb(172, 166, 166);
+}
+
+.separator.horizontal {
     cursor: col-resize;
+}
+
+.separator.vertical {
+    cursor: row-resize;
 }
