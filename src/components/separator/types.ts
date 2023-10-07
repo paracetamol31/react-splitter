@@ -1,5 +1,5 @@
 import { SplitterItem } from "../splitter-item/splitter-item";
-import { TOrientation } from "../types";
+import { TOrientation } from "../splitter/types";
 
 export interface IParamsSeparatorConstructor {
     firstSplitterItem?: SplitterItem | null;

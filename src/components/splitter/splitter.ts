@@ -1,14 +1,17 @@
 import { action, makeObservable, observable } from "mobx"
-import { TOrientation } from "../types"
-import { IParamsSplitterConstructor } from "./types"
+import { IParamsSplitterConstructor, TOrientation } from "./types"
 import { defaultSeparatorSize } from "../separator/types"
+import { SplitterItem } from "../splitter-item/splitter-item";
 
 export class Splitter {
     separatorSize: number = defaultSeparatorSize;
-    proportions: Array<number>;
+    proportions: Array<number> = [];
     orientation: TOrientation = "horizontal";
-    isInit: boolean = false;
+    currentSeparotorIndex: number | null = null;
+    listSplitterItems: Array<SplitterItem> = []
 
+    seavedPointCurrentSeparator: number | null = null;
+    isInit: boolean = false;
     isResizing: boolean = false;
 
     constructor(params?: IParamsSplitterConstructor) {

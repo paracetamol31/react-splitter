@@ -1,22 +1,34 @@
 import { CSSProperties, FC, useCallback } from "react";
-import { Separator } from "./separator";
 import separatorStyle from "./separator.module.css";
 import React from "react";
+import { Splitter } from "../splitter/splitter";
 
-export const SeparatorView: FC<{ separator: Separator }> = ({ separator }) => {
-    const className = `${separatorStyle.separator} ${separator.orientation}`;
+export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> = ({ splitter, indexSeparator }) => {
+    const className = `${separatorStyle.separator} ${splitter.orientation}`;
 
-    const onMouseDown = useCallback(() => {
-        separator.setResizing(true);
-    }, [separator]);
+    const onMouseDown = useCallback<React.MouseEventHandler<HTMLElement>>((event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        splitter.setResizing(true);
+        splitter.currentSeparotorIndex = indexSeparator;
+        if (splitter.orientation === "horizontal") {
+            splitter.seavedPointCurrentSeparator = event.clientX;
+        } else {
+            splitter.seavedPointCurrentSeparator = event.clientY;
+        }
+        const onMouseUp = (event: MouseEvent) => {
+            splitter.setResizing(false);
+            window.removeEventListener("mouseup", onMouseUp);
+        }
+
+        window.addEventListener("mouseup", onMouseUp);
+    }, [splitter]);
 
     const onMouseUp = useCallback(() => {
-        separator.setResizing(false);
-    }, [separator]);
+        splitter.setResizing(false);
+    }, [splitter]);
 
 
     const inlineStyle: CSSProperties = {
-        [separator.orientation === "horizontal" ? "width" : "height"]: `${separator.size}px`
+        [splitter.orientation === "horizontal" ? "width" : "height"]: `${splitter.separatorSize}px`
     }
     return (
         <section onMouseDown={onMouseDown} onMouseUp={onMouseUp} className={className} style={inlineStyle} />
