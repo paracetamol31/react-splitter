@@ -32,8 +32,7 @@ export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> =
             const ofsset: number = splitter.seavedPointCurrentSeparator - actualseparatorPoint;
             let percentageOfsset: number = ofsset / (size / 100) / 100;
 
-            let ratioSizeLeftItem: number = splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize - percentageOfsset;
-            let ratioSizeRightItem: number = splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize + percentageOfsset;
+
 
 
             if (percentageOfsset > 0) {
@@ -53,13 +52,23 @@ export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> =
                     }
                 }
 
-                const minRatioSizeLeftItem = splitter.listSplitterItems[splitter.currentSeparotorIndex].minSize / (size / 100) / 100;
-                if (ratioSizeLeftItem < minRatioSizeLeftItem) {
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize -= (Math.abs(percentageOfsset) - (minRatioSizeLeftItem - ratioSizeLeftItem));
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += (Math.abs(percentageOfsset) - (minRatioSizeLeftItem - ratioSizeLeftItem));
-                } else {
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize -= percentageOfsset;
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += percentageOfsset;
+                for (let i: number = splitter.currentSeparotorIndex; i >= 0; i--) {
+                    const minRatioSizeLeftItem = splitter.listSplitterItems[i].minSize / (size / 100) / 100;
+
+                    if (splitter.listSplitterItems[i].ratioSize <= minRatioSizeLeftItem) {
+                        continue;
+                    }
+
+                    const ratioSizeLeftItem: number = splitter.listSplitterItems[i].ratioSize - percentageOfsset;
+
+                    if (ratioSizeLeftItem < minRatioSizeLeftItem) {
+                        splitter.listSplitterItems[i].ratioSize -= (Math.abs(percentageOfsset) - (minRatioSizeLeftItem - ratioSizeLeftItem));
+                        splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += (Math.abs(percentageOfsset) - (minRatioSizeLeftItem - ratioSizeLeftItem));
+                    } else {
+                        splitter.listSplitterItems[i].ratioSize -= percentageOfsset;
+                        splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += percentageOfsset;
+                    }
+                    break;
                 }
             } else {
                 if (splitter.orientation === "horizontal") {
@@ -78,18 +87,32 @@ export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> =
                     }
                 }
 
-                const minRatioSizeRightItem = splitter.listSplitterItems[splitter.currentSeparotorIndex].minSize / (size / 100) / 100;
-                if (ratioSizeRightItem < minRatioSizeRightItem) {
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize += (Math.abs(percentageOfsset) - (minRatioSizeRightItem - ratioSizeRightItem));
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize -= (Math.abs(percentageOfsset) - (minRatioSizeRightItem - ratioSizeRightItem));
-                } else {
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize -= percentageOfsset;
-                    splitter.listSplitterItems[splitter.currentSeparotorIndex + 1].ratioSize += percentageOfsset;
+                for (let i: number = splitter.currentSeparotorIndex + 1; i < splitter.listSplitterItems.length; i++) {
+                    const minRatioSizeRightItem = splitter.listSplitterItems[i].minSize / (size / 100) / 100;
+
+                    if (splitter.listSplitterItems[i].ratioSize <= minRatioSizeRightItem) {
+                        continue;
+                    }
+
+                    const ratioSizeRightItem: number = splitter.listSplitterItems[i].ratioSize + percentageOfsset;
+
+                    if (ratioSizeRightItem < minRatioSizeRightItem) {
+                        splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize += (Math.abs(percentageOfsset) - (minRatioSizeRightItem - ratioSizeRightItem));
+                        splitter.listSplitterItems[i].ratioSize -= (Math.abs(percentageOfsset) - (minRatioSizeRightItem - ratioSizeRightItem));
+                    } else {
+                        splitter.listSplitterItems[splitter.currentSeparotorIndex].ratioSize -= percentageOfsset;
+                        splitter.listSplitterItems[i].ratioSize += percentageOfsset;
+                    }
+                    break;
                 }
             }
 
-
-            splitter.seavedPointCurrentSeparator = actualseparatorPoint;
+            // let sum = 0;
+            // for (let i = 0; i < splitter.listSplitterItems.length; i++) {
+            //     sum += splitter.listSplitterItems[i].ratioSize;
+            // }
+            // console.log("sum", sum);
+            // splitter.seavedPointCurrentSeparator = actualseparatorPoint;
 
         }
     };
@@ -123,7 +146,6 @@ export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> =
     const inlineStyle: CSSProperties = {
         [splitter.orientation === "horizontal" ? "width" : "height"]: `${splitter.separatorSize}px`
     }
-    console.log("separator");
     return (
         <section ref={separatorRef} onMouseDown={onMouseDown} onMouseUp={onMouseUp} className={className} style={inlineStyle} />
     )
