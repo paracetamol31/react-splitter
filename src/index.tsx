@@ -5,7 +5,7 @@ import React from 'react';
 import { Splitter } from './components/splitter/splitter';
 import "./styles.css";
 
-const splitterModel: Splitter = new Splitter({proportions: [50, 50, 100, 100]});
+const splitterModel: Splitter = new Splitter({ proportions: [50, 50, 200, 100], orientation: "vertical" });
 
 
 ReactDOM.render(

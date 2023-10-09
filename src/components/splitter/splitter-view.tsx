@@ -1,4 +1,4 @@
-import { CSSProperties, FC, MouseEventHandler, useCallback, useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import splitterStyles from "./splitter.module.css";
 import { Splitter } from "./splitter";
 import React from "react";
@@ -17,13 +17,6 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
         let listChildWidget: Array<string | JSX.Element | JSX.Element[]> = [];
 
         splitter.splitterRef = splitterRef;
-
-        // let size: number;
-        // if (splitter.orientation === "horizontal") {
-        //     size = splitterRef.current.clientWidth;
-        // } else {
-        //     size = splitterRef.current.clientHeight;
-        // }
 
         if (Array.isArray(children)) {
             listChildWidget = children;
@@ -63,18 +56,16 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
 
     }, [children, splitter, splitter.separatorSize, splitter.setResizing]);
 
-    const className = `${splitterStyles.separator} ${splitter.orientation}`;
-    const inlineStyle: CSSProperties = {
-        display: "flex",
-        flexDirection: splitter.orientation === "horizontal" ? "row" : "column"
-    }
+    const cursorStyle = splitter.isResizing ? splitterStyles.resizing : "";
 
-    console.log("splitter");
+    const className = `${splitterStyles.splitter} ${splitterStyles[splitter.orientation]} ${cursorStyle}`;
+
+    console.log(className);
     return (
         splitter.isInit
             ? <section
-                className={`${splitterStyles.splitter} ${className}`}
-                style={inlineStyle}
+                className={`${className}`}
+                onSelect={() => false}
                 ref={splitterRef}
             >
                 {content}

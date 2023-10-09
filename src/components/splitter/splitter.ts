@@ -8,11 +8,11 @@ export class Splitter {
     separatorSize: number = defaultSeparatorSize;
     proportions: Array<number> = [];
     orientation: TOrientation = "horizontal";
-    currentSeparotorIndex: number | null = null;
+    currentSeparatorIndex: number | null = null;
     listSplitterItems: Array<SplitterItem> = []
     splitterRef: RefObject<HTMLDivElement> | null = null;
 
-    seavedPointCurrentSeparator: number | null = null;
+    savedPointCurrentSeparator: number | null = null;
     isInit: boolean = false;
     isResizing: boolean = false;
 
