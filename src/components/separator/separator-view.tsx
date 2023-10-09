@@ -112,7 +112,7 @@ export const SeparatorView: FC<{ splitter: Splitter, indexSeparator: number }> =
             //     sum += splitter.listSplitterItems[i].ratioSize;
             // }
             // console.log("sum", sum);
-            // splitter.seavedPointCurrentSeparator = actualseparatorPoint;
+            splitter.savedPointCurrentSeparator = actualSeparatorPoint;
 
         }
     }, [splitter]);
