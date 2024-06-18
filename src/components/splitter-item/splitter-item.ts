@@ -1,4 +1,4 @@
-import { makeAutoObservable, makeObservable, observable } from "mobx";
+import { makeObservable, observable } from "mobx";
 import { IParamsSplitterItemConstructor } from "./types";
 import { Splitter } from "../splitter/splitter";
 
@@ -7,7 +7,6 @@ export class SplitterItem {
     size: number = 100;
     minSize: number = 200;
     offset: number = 0
-    isResizing: boolean = false;
 
     ratioSize: number = 0.5;
     ratioMinSize: number | null = null;

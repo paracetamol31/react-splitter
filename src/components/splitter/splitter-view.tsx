@@ -8,15 +8,12 @@ import { SplitterItem } from "../splitter-item/splitter-item";
 import { observer } from "mobx-react";
 import { TChildrenJSXElement } from "./types";
 
-const content: Array<string | JSX.Element> = [];
-
 export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElement }> = observer(({ splitter, children }) => {
     const splitterRef = useRef<HTMLDivElement>(null);
-
+    splitter.splitterRef = splitterRef;
+    const content = useRef<Array<string | JSX.Element>>([]);
     useEffect(() => {
         let listChildWidget: Array<string | JSX.Element | JSX.Element[]> = [];
-
-        splitter.splitterRef = splitterRef;
 
         if (Array.isArray(children)) {
             listChildWidget = children;
@@ -29,7 +26,6 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
         if (isValidProportions) {
             sumProportions = splitter.proportions.reduce((sum, item) => sum + item, 0);
         }
-
         listChildWidget.forEach((child, index) => {
             let proportion = 1;
             if (isValidProportions) {
@@ -46,9 +42,9 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
             const splitterItem: SplitterItem = new SplitterItem({ offset: offset, splitter: splitter, ratioSize: ratioSize });
             splitter.listSplitterItems.push(splitterItem);
             if (index !== 0) {
-                content.push(<SeparatorView splitter={splitter} indexSeparator={index - 1} />);
+                content.current.push(<SeparatorView splitter={splitter} indexSeparator={index - 1} />);
             }
-            content.push(
+            content.current.push(
                 <SplitterItemView splitterItem={splitterItem}>{child}</SplitterItemView>
             );
         })
@@ -60,16 +56,14 @@ export const SplitterView: FC<{ splitter: Splitter, children: TChildrenJSXElemen
 
     const className = `${splitterStyles.splitter} ${splitterStyles[splitter.orientation]} ${cursorStyle}`;
 
-    console.log(className);
     return (
-        splitter.isInit
-            ? <section
-                className={`${className}`}
-                onSelect={() => false}
-                ref={splitterRef}
-            >
-                {content}
-            </section>
-            : null
+        <section
+            className={`${className}`}
+            onSelect={() => false}
+            ref={splitterRef}
+        >
+            {splitter.isInit ? content.current : null}
+        </section>
+
     );
 });
